@@ -1,3 +1,5 @@
+// script.js
+
 const baseURL = "http://localhost:8888";
 
 document.addEventListener("DOMContentLoaded", function () {

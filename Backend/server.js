@@ -1,5 +1,7 @@
+//server.js
+
 require("./config");
-require("./db-connect");
+const connectMongoDB = require("./db-connect");
 const express = require("express");
 const bodyParser = require("body-parser");
 
@@ -23,6 +25,8 @@ app.use(cors(corsOptions));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+connectMongoDB();
 
 let tasks = [];
 
