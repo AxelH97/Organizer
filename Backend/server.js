@@ -1,9 +1,11 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
+const cors = require("cors");
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors());
 
 let tasks = [];
 
@@ -21,7 +23,7 @@ app.post("/api/tasks", (req, res) => {
   res.json(newTask);
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8888;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
