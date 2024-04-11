@@ -41,6 +41,20 @@ app.post("/api/register", async (req, res) => {
   }
 });
 
+app.post("/api/login", async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const user = await User.findOne({ email });
+    if (!user || user.password !== password) {
+      throw new Error("Ungültige Anmeldeinformationen");
+    }
+    req.session.user = user;
+    res.json({ message: "Anmeldung erfolgreich" });
+  } catch (error) {
+    res.status(401).json({ error: error.message });
+  }
+});
+
 app.get("/api/tasks", (req, res) => {
   res.json(tasks);
 });
