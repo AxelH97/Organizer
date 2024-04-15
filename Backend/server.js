@@ -4,12 +4,15 @@ require("./config");
 const connectMongoDB = require("./db-connect");
 const express = require("express");
 const bodyParser = require("body-parser");
+const bcrypt = require("bcrypt");
+const session = require("express-session");
+const User = require("./userSchema");
 
 const cors = require("cors");
 
 const app = express();
 
-const allowedOrigins = "http://localhost:5173";
+const allowedOrigins = ["http://localhost:5173"];
 
 const corsOptions = {
   origin: function (origin, callback) {
@@ -25,15 +28,27 @@ app.use(cors(corsOptions));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(
+  session({
+    secret: "geheimnisvollerSchluessel",
+    resave: true,
+    saveUninitialized: true,
+  })
+);
 
 connectMongoDB();
 
 let tasks = [];
 
+app.get("/api/tasks", (req, res) => {
+  res.json(tasks);
+});
+
 app.post("/api/register", async (req, res) => {
   const { username, email, password } = req.body;
   try {
-    const newUser = new User({ username, email, password });
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newUser = new User({ username, email, password: hashedPassword });
     await newUser.save();
     res.status(201).json({ message: "Registrierung erfolgreich" });
   } catch (error) {
@@ -45,18 +60,15 @@ app.post("/api/login", async (req, res) => {
   const { email, password } = req.body;
   try {
     const user = await User.findOne({ email });
-    if (!user || user.password !== password) {
+    if (!user || !(await bcrypt.compare(password, user.password))) {
       throw new Error("Ungültige Anmeldeinformationen");
     }
+    // Setze die Benutzersitzung
     req.session.user = user;
     res.json({ message: "Anmeldung erfolgreich" });
   } catch (error) {
     res.status(401).json({ error: error.message });
   }
-});
-
-app.get("/api/tasks", (req, res) => {
-  res.json(tasks);
 });
 
 app.post("/api/tasks", (req, res) => {
@@ -88,6 +100,12 @@ app.delete("/api/tasks/:id", (req, res) => {
   } else {
     res.status(404).json({ error: "Task not found" });
   }
+});
+
+app.post("/api/logout", (req, res) => {
+  req.session.destroy();
+
+  res.json({ message: "Abmeldung erfolgreich" });
 });
 
 const PORT = process.env.PORT;

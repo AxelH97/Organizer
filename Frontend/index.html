@@ -12,14 +12,34 @@
 
       <form id="registerForm">
         <input type="text" id="username" placeholder="Benutzername" required />
-        <input type="email" id="email" placeholder="E-Mail-Adresse" required />
-        <input type="password" id="password" placeholder="Passwort" required />
+        <input
+          type="email"
+          id="emailRegister"
+          placeholder="E-Mail-Adresse"
+          required
+        />
+        <input
+          type="password"
+          id="passwordRegister"
+          placeholder="Passwort"
+          required
+        />
         <button type="submit">Registrieren</button>
       </form>
 
       <form id="loginForm">
-        <input type="email" id="email" placeholder="E-Mail-Adresse" required />
-        <input type="password" id="password" placeholder="Passwort" required />
+        <input
+          type="email"
+          id="emailLogin"
+          placeholder="E-Mail-Adresse"
+          required
+        />
+        <input
+          type="password"
+          id="passwordLogin"
+          placeholder="Passwort"
+          required
+        />
         <button type="submit">Anmelden</button>
       </form>
 
@@ -27,6 +47,8 @@
       <button id="addTaskBtn">Hinzufügen</button>
       <ul id="taskList"></ul>
     </div>
+
+    <button id="logoutBtn">Abmelden</button>
 
     <script src="script.js"></script>
   </body>
