@@ -2,70 +2,63 @@
 
 body {
   font-family: Arial, sans-serif;
-  background-color: black;
+  background-image: url(https://image.architonic.com/pro2-3/20143116/green-marble-verde-alpi-pro-b-arcit18.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
   margin: 0;
   padding: 0;
 }
-
 .container {
-  max-width: 60vh;
-  margin: 2vh auto;
+  background-image: url(https://us.123rf.com/450wm/jirsak/jirsak1601/jirsak160100012/50997470-to-do-liste-%C3%BCberschrift-hintergrund-vorlage-f%C3%BCr-business-pr%C3%A4sentation-mit-to-do-liste-hintergrund.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  max-width: 55vh;
+  margin: 16vh auto;
   background-color: #fff;
-  padding: 2vh;
-  border-radius: 8px;
-  box-shadow: 0 0 1vh rgba(0, 0, 0, 0.1);
+  padding: 25vh;
+  border-radius: 60px;
+  box-shadow: 0 0 1vh rgba(110, 213, 26, 0);
 }
-
-h1 {
-  text-align: center;
-  color: #333;
-}
-
 input[type="text"] {
   width: calc(100% - 80px);
   padding: 1vh;
   margin-bottom: 1vh;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  border: 2px solid #ccc;
+  border-radius: 50px;
   font-size: 1.6vh;
 }
-
 button {
   padding: 1vh 2vh;
-  background-color: #4caf50;
+  background-color: #5d645b93;
   color: #fff;
   border: none;
-  border-radius: 4vh;
+  border-radius: 6vh;
   cursor: pointer;
-  font-size: 1.6vh;
+  font-size: 2vh;
 }
-
 button:hover {
-  background-color: #45a049;
+  background-color: #e0eae02f;
 }
-
 ul {
   list-style-type: none;
   padding: 0;
 }
-
 li {
   padding: 1vh;
   margin-bottom: 5px;
   border: 1px solid #ddd;
-  border-radius: 4px;
+  border-radius: 6px;
   background-color: #f9f9f9;
 }
-
 li button {
   float: right;
-  background-color: #f44336;
-  color: #fff;
+  background-color: red;
+  color: #ffffffda;
   border: none;
-  border-radius: 4px;
+  padding: 5px 10px;
+  border-radius: 10px;
   cursor: pointer;
 }
-
 li button:hover {
   background-color: #d32f2f;
 }
