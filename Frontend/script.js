@@ -39,88 +39,84 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   logoutBtn.addEventListener("click", function () {
-    fetch(`${baseURL}/api/logout`, {
-      method: "POST",
-    })
-      .then((response) => {
-        if (response.ok) {
-          console.log("Abmeldung erfolgreich");
-        } else {
-          throw new Error("Abmeldung fehlgeschlagen");
-        }
+    logoutUser()
+      .then(() => {
+        registerForm.style.display = "block";
+        loginForm.style.display = "block";
+        taskContainer.style.display = "none";
+        taskList.innerHTML = ""; // Leere die Aufgabenliste beim Abmelden
       })
       .catch((error) => {
         console.error("Fehler bei der Abmeldung:", error);
       });
   });
 
-  function loadTasks() {
-    fetch(`${baseURL}/api/tasks`)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Fehler beim Laden der Aufgabenliste");
-        }
-        return response.json();
-      })
-      .then((tasks) => {
-        if (!Array.isArray(tasks)) {
-          throw new Error("Ungültiges Aufgabenformat");
-        }
-        taskList.innerHTML = "";
-        tasks.forEach((task) => {
-          const li = document.createElement("li");
-          li.textContent = task.text;
-          const deleteBtn = document.createElement("button");
-          deleteBtn.textContent = "Löschen";
-          deleteBtn.addEventListener("click", function () {
-            deleteTask(task.id);
-          });
-          li.appendChild(deleteBtn);
-          taskList.appendChild(li);
-        });
-      })
-      .catch((error) =>
-        console.error("Fehler beim Laden der Aufgabenliste:", error)
-      );
-  }
-
-  function deleteTask(taskId) {
-    fetch(`${baseURL}/api/tasks/${taskId}`, {
-      method: "DELETE",
+  // Weitere Funktionen für die Benutzerinteraktion hier sein
+});
+function loadTasks() {
+  fetch(`${baseURL}/api/tasks`)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Fehler beim Laden der Aufgabenliste");
+      }
+      return response.json();
     })
-      .then((response) => {
-        if (response.ok) {
-          console.log("Aufgabe erfolgreich gelöscht");
-          loadTasks();
-        } else {
-          throw new Error("Fehler beim Löschen der Aufgabe");
-        }
+    .then((tasks) => {
+      if (!Array.isArray(tasks)) {
+        throw new Error("Ungültiges Aufgabenformat");
+      }
+      taskList.innerHTML = "";
+      tasks.forEach((task) => {
+        const li = document.createElement("li");
+        li.textContent = task.text;
+        const deleteBtn = document.createElement("button");
+        deleteBtn.textContent = "Löschen";
+        deleteBtn.addEventListener("click", function () {
+          deleteTask(task.id);
+        });
+        li.appendChild(deleteBtn);
+        taskList.appendChild(li);
+      });
+    })
+    .catch((error) =>
+      console.error("Fehler beim Laden der Aufgabenliste:", error)
+    );
+}
+
+function deleteTask(taskId) {
+  fetch(`${baseURL}/api/tasks/${taskId}`, {
+    method: "DELETE",
+  })
+    .then((response) => {
+      if (response.ok) {
+        console.log("Aufgabe erfolgreich gelöscht");
+        loadTasks();
+      } else {
+        throw new Error("Fehler beim Löschen der Aufgabe");
+      }
+    })
+    .catch((error) => console.error("Fehler beim Löschen der Aufgabe:", error));
+}
+
+addTaskBtn.addEventListener("click", function () {
+  const taskText = taskInput.value.trim();
+  if (taskText !== "") {
+    fetch(`${baseURL}/api/tasks`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ text: taskText }),
+    })
+      .then((response) => response.json())
+      .then(() => {
+        taskInput.value = "";
+        loadTasks();
       })
       .catch((error) =>
-        console.error("Fehler beim Löschen der Aufgabe:", error)
+        console.error("Fehler beim Hinzufügen der Aufgabe:", error)
       );
   }
-
-  addTaskBtn.addEventListener("click", function () {
-    const taskText = taskInput.value.trim();
-    if (taskText !== "") {
-      fetch(`${baseURL}/api/tasks`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ text: taskText }),
-      })
-        .then((response) => response.json())
-        .then(() => {
-          taskInput.value = "";
-          loadTasks();
-        })
-        .catch((error) =>
-          console.error("Fehler beim Hinzufügen der Aufgabe:", error)
-        );
-    }
-  });
 });
 
 function registerUser(username, email, password) {
@@ -164,8 +160,8 @@ async function loginUser(email, password) {
     });
 }
 
-function logoutUser() {
-  fetch(`${baseURL}/api/logout`, {
+async function logoutUser() {
+  return fetch(`${baseURL}/api/logout`, {
     method: "POST",
   })
     .then((response) => {
