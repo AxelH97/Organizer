@@ -10,6 +10,10 @@ document.addEventListener("DOMContentLoaded", function () {
   const loginForm = document.getElementById("loginForm");
   const logoutBtn = document.getElementById("logoutBtn");
 
+  registerForm.style.display = "block";
+  loginForm.style.display = "block";
+  taskContainer.style.display = "none";
+
   registerForm.addEventListener("submit", function (event) {
     event.preventDefault();
     const username = document.getElementById("username").value;
@@ -22,7 +26,16 @@ document.addEventListener("DOMContentLoaded", function () {
     event.preventDefault();
     const email = document.getElementById("emailLogin").value;
     const password = document.getElementById("passwordLogin").value;
-    loginUser(email, password);
+    loginUser(email, password)
+      .then(() => {
+        registerForm.style.display = "none";
+        loginForm.style.display = "none";
+        taskContainer.style.display = "block";
+        loadTasks();
+      })
+      .catch((error) => {
+        console.error("Fehler bei der Anmeldung:", error);
+      });
   });
 
   logoutBtn.addEventListener("click", function () {
@@ -130,7 +143,7 @@ function registerUser(username, email, password) {
     });
 }
 
-function loginUser(email, password) {
+async function loginUser(email, password) {
   fetch(`${baseURL}/api/login`, {
     method: "POST",
     headers: {
@@ -141,6 +154,7 @@ function loginUser(email, password) {
     .then((response) => {
       if (response.ok) {
         console.log("Anmeldung erfolgreich");
+        return response.json();
       } else {
         throw new Error("Anmeldung fehlgeschlagen");
       }
